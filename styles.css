@@ -701,16 +701,30 @@ a:hover {
 }
 
 .organizers-names-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     max-width: 1000px;
-    gap: 1rem;
-    text-align: center;
+    gap: 3rem; /* Espaço base entre eles */
     color: var(--color-gold-light);
     font-family: var(--font-heading);
     font-size: 1.8rem;
     font-weight: 600;
+}
+
+.org-name-left {
+    text-align: right;
+    margin-right: -1rem; /* Aproxima do centro */
+}
+
+.org-name-center {
+    text-align: center;
+}
+
+.org-name-right {
+    text-align: left;
+    margin-left: -1rem; /* Aproxima do centro */
 }
 
 .cta-header-icon {
@@ -911,6 +925,12 @@ a:hover {
     .organizers-names-grid {
         font-size: 1rem;
         gap: 0.5rem;
+        flex-direction: column; /* Em telas muito pequenas empilha */
+    }
+
+    .org-name-left, .org-name-right {
+        margin: 0;
+        text-align: center;
     }
 }
 
