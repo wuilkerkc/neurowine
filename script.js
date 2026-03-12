@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Dicionário com os links de pagamento temporários (o usuário precisa preencher com os links reais)
             const linksPagamento = {
-                'medico': '#link-pagamento-medico', // Substitua pelo link real do Mercado Pago / Asaas
+                'medico': 'https://mpago.la/1ZYFUNr', // Link de pagamento real
                 'medico_acompanhante': '#link-pagamento-medico-acompanhante',
                 'estudante_aulas': '#link-pagamento-estudante-aulas',
                 'estudante_completo': '#link-pagamento-estudante-completo'
