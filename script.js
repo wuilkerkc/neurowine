@@ -216,10 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Dicionário com os links de pagamento temporários (o usuário precisa preencher com os links reais)
             const linksPagamento = {
-                'medico': 'https://mpago.la/1ZYFUNr', // Link de pagamento real
-                'medico_acompanhante': '#link-pagamento-medico-acompanhante',
-                'estudante_aulas': '#link-pagamento-estudante-aulas',
-                'estudante_completo': '#link-pagamento-estudante-completo'
+                'medico': 'https://mpago.la/1ZYFUNr',
+                'medico_acompanhante': 'https://mpago.la/178ufQK',
+                'estudante_aulas': 'https://mpago.la/2H787EN',
+                'estudante_completo': 'https://mpago.la/1n13ANZ'
             };
 
             const linkSelecionado = linksPagamento[categoriaSelecionada];
