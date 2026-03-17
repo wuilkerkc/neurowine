@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Galeria de Fotos do NeuroWine. Uma imersão científica e gastronômica na Serra Catarinense.">
+    <title>NeuroWine 2026 | Galeria de Fotos</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="styles.css?v=8.0">
+    
+    <style>
+        .gallery-header {
+            padding: 150px 20px 60px;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--bg-dark), rgba(15, 15, 15, 0.9));
+        }
+        
+        .gallery-title {
+            font-size: 3.5rem;
+            color: var(--color-gold);
+            font-family: var(--font-heading);
+            margin-bottom: 20px;
+        }
+        
+        .gallery-copy {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: var(--color-text);
+            font-weight: 300;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+        }
+        
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            aspect-ratio: 4 / 3;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        
+        /* Modal from inscricao for full screen images */
+        .img-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .img-modal-overlay.active {
+            display: flex;
+        }
+        
+        .img-modal-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            object-fit: contain;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        
+        .close-img-modal {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+
+        .nav-links a {
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-gold);
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" style="background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px);">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="Logo_NeuroWine.jpg" alt="NeuroWine Logo" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#sobre">O Evento</a></li>
+                <li><a href="index.html#detalhes">Detalhes</a></li>
+                <li><a href="index.html#regulamento">Regulamento</a></li>
+                <li><a href="galeria.html" style="color: var(--color-gold);">Galeria de Fotos</a></li>
+                <li><a href="inscricao.html" class="btn btn-primary">Participar</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="gallery-header reveals-on-scroll">
+        <h1 class="gallery-title">Nossa História</h1>
+        <p class="gallery-copy">
+            "Mais do que discutir ciência, nós criamos <strong>conexões profundas</strong>. <br>
+            Só quem viveu estes momentos entende: foi um reencontro com a nossa essência, 
+            com os amigos de profissão e com nossas origens."
+        </p>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-grid">
+
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/01d6d75a8a9525d678ac7cbd_Evento_1_NeuroWine__24-06-23_-286.jpg')">
+            <img src="Galeria fotos/01d6d75a8a9525d678ac7cbd_Evento_1_NeuroWine__24-06-23_-286.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/01fa5ba3d4053dd987356a3a_Evento_1_NeuroWine__24-06-23_-199.jpg')">
+            <img src="Galeria fotos/01fa5ba3d4053dd987356a3a_Evento_1_NeuroWine__24-06-23_-199.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/06fe3b4995474842b6fc5002_Evento_1_NeuroWine_Day_2-390.jpg')">
+            <img src="Galeria fotos/06fe3b4995474842b6fc5002_Evento_1_NeuroWine_Day_2-390.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/0afeaede954027838e30d8c7_Evento_1_NeuroWine_Day_2-610.jpg')">
+            <img src="Galeria fotos/0afeaede954027838e30d8c7_Evento_1_NeuroWine_Day_2-610.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/0bb7163702ac5687cc52d4d3_Evento_1_NeuroWine_Day_2-792.jpg')">
+            <img src="Galeria fotos/0bb7163702ac5687cc52d4d3_Evento_1_NeuroWine_Day_2-792.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/0bda0d2a57792bde7d8686ca_Evento_1_NeuroWine_Day_2-274.jpg')">
+            <img src="Galeria fotos/0bda0d2a57792bde7d8686ca_Evento_1_NeuroWine_Day_2-274.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/0c40bc11b192924d322b96e5_Evento_1_NeuroWine_Day_2-498.jpg')">
+            <img src="Galeria fotos/0c40bc11b192924d322b96e5_Evento_1_NeuroWine_Day_2-498.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/0c6f449d48118a022ac506d4_Evento_1_NeuroWine_Day_2-350.jpg')">
+            <img src="Galeria fotos/0c6f449d48118a022ac506d4_Evento_1_NeuroWine_Day_2-350.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.9s" onclick="openImageModal('Galeria fotos/0d39f4eee5cf0283b6aa8c53_Evento_1_NeuroWine_Day_2-688.jpg')">
+            <img src="Galeria fotos/0d39f4eee5cf0283b6aa8c53_Evento_1_NeuroWine_Day_2-688.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/0e4b164487a7b22e401e25bf_Evento_1_NeuroWine_Day_2-386.jpg')">
+            <img src="Galeria fotos/0e4b164487a7b22e401e25bf_Evento_1_NeuroWine_Day_2-386.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/0e6467c54519945d78148b0f_Evento_1_NeuroWine_Day_2-620.jpg')">
+            <img src="Galeria fotos/0e6467c54519945d78148b0f_Evento_1_NeuroWine_Day_2-620.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/0ea6a19c8fa9853b85a3199b_Evento_1_NeuroWine__24-06-23_-236.jpg')">
+            <img src="Galeria fotos/0ea6a19c8fa9853b85a3199b_Evento_1_NeuroWine__24-06-23_-236.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/0eb0a7c74df49e1752632594_Evento_1_NeuroWine_Day_3-152.jpg')">
+            <img src="Galeria fotos/0eb0a7c74df49e1752632594_Evento_1_NeuroWine_Day_3-152.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/0f55e9137b2e91d31dc6c526_Evento_1_NeuroWine_Day_2-233.jpg')">
+            <img src="Galeria fotos/0f55e9137b2e91d31dc6c526_Evento_1_NeuroWine_Day_2-233.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/0fe50e673a580fe25d0474be_Evento_1_NeuroWine_Day_2-564.jpg')">
+            <img src="Galeria fotos/0fe50e673a580fe25d0474be_Evento_1_NeuroWine_Day_2-564.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/141_Evento 1º NeuroWine Day 3-142.jpg')">
+            <img src="Galeria fotos/141_Evento 1º NeuroWine Day 3-142.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/154_Evento 1º NeuroWine Day 3-155.jpg')">
+            <img src="Galeria fotos/154_Evento 1º NeuroWine Day 3-155.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.9s" onclick="openImageModal('Galeria fotos/1b8e1592a41116026ccb0725_Evento_1_NeuroWine_Day_2-452.jpg')">
+            <img src="Galeria fotos/1b8e1592a41116026ccb0725_Evento_1_NeuroWine_Day_2-452.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/1cb9609e43e339d674d2127b_Evento_1_NeuroWine_Day_2-273.jpg')">
+            <img src="Galeria fotos/1cb9609e43e339d674d2127b_Evento_1_NeuroWine_Day_2-273.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/2f1b2c9db7b62f787434d364_Evento_1_NeuroWine_Day_2-243.jpg')">
+            <img src="Galeria fotos/2f1b2c9db7b62f787434d364_Evento_1_NeuroWine_Day_2-243.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/2f8ea0dbe8ba6668e9b0e3a2_Evento_1_NeuroWine_Day_1-392.jpg')">
+            <img src="Galeria fotos/2f8ea0dbe8ba6668e9b0e3a2_Evento_1_NeuroWine_Day_1-392.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/2fc53437c1c1c87ac392290c_Evento_1_NeuroWine_Day_2-528.jpg')">
+            <img src="Galeria fotos/2fc53437c1c1c87ac392290c_Evento_1_NeuroWine_Day_2-528.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/3afdd5e3300f68140c2d35c9_Evento_1_NeuroWine_Day_2-623.jpg')">
+            <img src="Galeria fotos/3afdd5e3300f68140c2d35c9_Evento_1_NeuroWine_Day_2-623.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/3c38de421b8a58fafd648f03_Evento_1_NeuroWine_Day_2-389.jpg')">
+            <img src="Galeria fotos/3c38de421b8a58fafd648f03_Evento_1_NeuroWine_Day_2-389.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/3ddb4b1a1b86c2d783434554_Evento_1_NeuroWine__24-06-23_-93.jpg')">
+            <img src="Galeria fotos/3ddb4b1a1b86c2d783434554_Evento_1_NeuroWine__24-06-23_-93.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/3e439107e993a229e5a8af24_Evento_1_NeuroWine_Day_2-257.jpg')">
+            <img src="Galeria fotos/3e439107e993a229e5a8af24_Evento_1_NeuroWine_Day_2-257.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.9s" onclick="openImageModal('Galeria fotos/4af501ae261a017026d4416d_Evento_1_NeuroWine_Day_2-855.jpg')">
+            <img src="Galeria fotos/4af501ae261a017026d4416d_Evento_1_NeuroWine_Day_2-855.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/4dbd2d9a4d37b94adae593a9_Evento_1_NeuroWine__24-06-23_-232.jpg')">
+            <img src="Galeria fotos/4dbd2d9a4d37b94adae593a9_Evento_1_NeuroWine__24-06-23_-232.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/4e79d0642abacdf89147cd6f_Evento_1_NeuroWine__24-06-23_-146.jpg')">
+            <img src="Galeria fotos/4e79d0642abacdf89147cd6f_Evento_1_NeuroWine__24-06-23_-146.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/5a29b59f2ca7b0b13ee8af8e_Evento_1_NeuroWine_Day_2-171.jpg')">
+            <img src="Galeria fotos/5a29b59f2ca7b0b13ee8af8e_Evento_1_NeuroWine_Day_2-171.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/5cd67fbc78809742a415d679_Evento_1_NeuroWine_Day_2-513.jpg')">
+            <img src="Galeria fotos/5cd67fbc78809742a415d679_Evento_1_NeuroWine_Day_2-513.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/5d6202e37a041a4e881d8ef7_Evento_1_NeuroWine_Day_2-221.jpg')">
+            <img src="Galeria fotos/5d6202e37a041a4e881d8ef7_Evento_1_NeuroWine_Day_2-221.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/5ddfeb57beffcdaf9566bbf1_Evento_1_NeuroWine_Day_2-239.jpg')">
+            <img src="Galeria fotos/5ddfeb57beffcdaf9566bbf1_Evento_1_NeuroWine_Day_2-239.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/6ade9fc099434631d2fc4ee6_Evento_1_NeuroWine_Day_2-224.jpg')">
+            <img src="Galeria fotos/6ade9fc099434631d2fc4ee6_Evento_1_NeuroWine_Day_2-224.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/7II00050-2.jpg')">
+            <img src="Galeria fotos/7II00050-2.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.9s" onclick="openImageModal('Galeria fotos/7II00143-2.jpg')">
+            <img src="Galeria fotos/7II00143-2.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/7II00145.jpg')">
+            <img src="Galeria fotos/7II00145.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/7II00741.jpg')">
+            <img src="Galeria fotos/7II00741.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/7II00745.jpg')">
+            <img src="Galeria fotos/7II00745.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/7II00747.jpg')">
+            <img src="Galeria fotos/7II00747.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/7II00834.jpg')">
+            <img src="Galeria fotos/7II00834.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/7II08560.jpg')">
+            <img src="Galeria fotos/7II08560.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/7II08664.jpg')">
+            <img src="Galeria fotos/7II08664.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/7II08691.jpg')">
+            <img src="Galeria fotos/7II08691.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.9s" onclick="openImageModal('Galeria fotos/7II08770.jpg')">
+            <img src="Galeria fotos/7II08770.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.1s" onclick="openImageModal('Galeria fotos/7II08883.jpg')">
+            <img src="Galeria fotos/7II08883.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.2s" onclick="openImageModal('Galeria fotos/7II08930.jpg')">
+            <img src="Galeria fotos/7II08930.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.3s" onclick="openImageModal('Galeria fotos/7a9ba70afd3a652767573ccf_Evento_1_NeuroWine_Day_2-554.jpg')">
+            <img src="Galeria fotos/7a9ba70afd3a652767573ccf_Evento_1_NeuroWine_Day_2-554.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.4s" onclick="openImageModal('Galeria fotos/7be0187942d1a1fbf8d49b11_Evento_1_NeuroWine_Day_2-635.jpg')">
+            <img src="Galeria fotos/7be0187942d1a1fbf8d49b11_Evento_1_NeuroWine_Day_2-635.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.5s" onclick="openImageModal('Galeria fotos/7be2e7d1789a1dfcc90de155_Evento_1_NeuroWine_Day_2-351.jpg')">
+            <img src="Galeria fotos/7be2e7d1789a1dfcc90de155_Evento_1_NeuroWine_Day_2-351.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.6s" onclick="openImageModal('Galeria fotos/7c09550930fb942b9e1b1a2b_Evento_1_NeuroWine_Day_2-361.jpg')">
+            <img src="Galeria fotos/7c09550930fb942b9e1b1a2b_Evento_1_NeuroWine_Day_2-361.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.7s" onclick="openImageModal('Galeria fotos/7db7e54439cba7f28197d426_Evento_1_NeuroWine_Day_2-249.jpg')">
+            <img src="Galeria fotos/7db7e54439cba7f28197d426_Evento_1_NeuroWine_Day_2-249.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+        <div class="gallery-item reveals-on-scroll" style="animation-delay: 0.8s" onclick="openImageModal('Galeria fotos/7e7bc9c600ee8062c86c52d1_Evento_1_NeuroWine_Day_2-272.jpg')">
+            <img src="Galeria fotos/7e7bc9c600ee8062c86c52d1_Evento_1_NeuroWine_Day_2-272.jpg" loading="lazy" alt="Momento NeuroWine">
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div class="img-modal-overlay" id="imageModal">
+        <button class="close-img-modal" onclick="closeImageModal()">&times;</button>
+        <img src="" class="img-modal-content" id="expandedImg">
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container reveals-on-scroll">
+            <img src="Logo_NeuroWine.jpg" alt="NeuroWine Logo Colorido" class="footer-logo-colored-large">
+
+            <p>Um evento exclusivo focado em neurocirurgia avançada, networking de alto nível e a melhor experiência
+                enogastronômica da Serra Catarinense.</p>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2026 NeuroWine. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS for Gallery Modal and Mobile Menu -->
+    <script>
+        function openImageModal(src) {
+            document.getElementById('expandedImg').src = src;
+            document.getElementById('imageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on escape key or click outside
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event){
+            if(event.key === "Escape"){
+                closeImageModal();
+            }
+        });
+
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if(hamburger) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveals-on-scroll');
+        function reveal() {
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                let elementVisible = 50;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        window.addEventListener('scroll', reveal);
+        // Trigger once on load
+        setTimeout(reveal, 100);
+    </script>
+</body>
+</html>
