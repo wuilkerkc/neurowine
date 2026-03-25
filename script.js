@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Interceptar form submit para redirecionamento de pagamento
+    // Interceptar form submit para redirecionamento de pagamento e envio de dados
     const regForm = document.getElementById('registrationForm');
     if (regForm) {
         regForm.addEventListener('submit', (e) => {
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const categoriaSelecionada = categoriaElement.value;
             
-            // Dicionário com os links de pagamento temporários (o usuário precisa preencher com os links reais)
+            // Dicionário com os links de pagamento
             const linksPagamento = {
                 'medico': 'https://mpago.la/1ZYFUNr',
                 'medico_acompanhante': 'https://mpago.la/178ufQK',
@@ -225,15 +225,44 @@ document.addEventListener('DOMContentLoaded', () => {
             const linkSelecionado = linksPagamento[categoriaSelecionada];
 
             if (linkSelecionado && linkSelecionado !== '') {
-                // Aqui removemos o modal antes de redirecionar para não bugar a tela
-                document.getElementById('registrationModal').classList.remove('active');
-                document.body.style.overflow = 'auto';
+                // Organizar os dados do formulário
+                const formData = new FormData(regForm);
                 
-                // Mensagem amigável de redirecionamento
-                alert('Sua solicitação foi registrada! Você será redirecionado para a página de pagamento seguro.');
-                
-                // Redireciona para o gateway
-                window.location.href = linkSelecionado;
+                // Configurações do FormSubmit
+                formData.append("_subject", "Nova Inscrição Recebida! - NeuroWine 2026");
+                formData.append("_autoresponse", "Olá! Recebemos sua ficha de inscrição para o NeuroWine 2026 com sucesso. O próximo passo para garantir sua vaga é concluir o pagamento através do link do Mercado Pago (se você ainda não o fez durante o cadastro). Se precisar de ajuda, entre em contato via WhatsApp com a organização.");
+                formData.append("_template", "box");
+                formData.append("_captcha", "false"); // desativa o captcha para não quebrar o fluxo automático
+
+                // Selecionar o botão de submit para mostrar estado de "Carregando"
+                const submitBtn = regForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = "Processando Inscrição, por favor aguarde...";
+                submitBtn.disabled = true;
+
+                // Enviar dados em background (AJAX) para o FormSubmit
+                fetch("https://formsubmit.co/ajax/wuilker@gmail.com", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Remover modal
+                    document.getElementById('registrationModal').classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    
+                    alert('Sua ficha foi enviada com sucesso! Você será redirecionado para nossa página de pagamento seguro.');
+                    
+                    // Redirecionar para o pagamento
+                    window.location.href = linkSelecionado;
+                })
+                .catch(error => {
+                    console.error("Erro no formulário:", error);
+                    alert('Houve um pequeno erro na conexão, mas você pode prosseguir com o pagamento. Avisaremos a organização!');
+                    
+                    // Redirecionar de qualquer forma para não perder a venda
+                    window.location.href = linkSelecionado;
+                });
             } else {
                 alert('Não foi possível encontrar o link de pagamento. Tente novamente mais tarde.');
             }
