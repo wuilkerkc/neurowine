@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.disabled = true;
 
                 // Enviar dados em background (AJAX) para o FormSubmit
-                fetch("https://formsubmit.co/ajax/wuilker@gmail.com", {
+                fetch("https://formsubmit.co/ajax/e8ec10b9a1d188137b9ebdfae79a4234", {
                     method: "POST",
                     body: formData
                 })
