@@ -227,12 +227,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (linkSelecionado && linkSelecionado !== '') {
                 // Organizar os dados do formulário
                 const formData = new FormData(regForm);
+                const dataObj = {};
+                formData.forEach((value, key) => { dataObj[key] = value });
                 
                 // Configurações do FormSubmit
-                formData.append("_subject", "Nova Inscrição Recebida! - NeuroWine 2026");
-                formData.append("_autoresponse", "Olá! Recebemos sua ficha de inscrição para o NeuroWine 2026 com sucesso. O próximo passo para garantir sua vaga é concluir o pagamento através do link do Mercado Pago (se você ainda não o fez durante o cadastro). Se precisar de ajuda, entre em contato via WhatsApp com a organização.");
-                formData.append("_template", "box");
-                formData.append("_captcha", "false"); // desativa o captcha para não quebrar o fluxo automático
+                dataObj["_subject"] = "Nova Inscrição Recebida! - NeuroWine 2026";
+                dataObj["_autoresponse"] = "Olá! Recebemos sua ficha de inscrição para o NeuroWine 2026 com sucesso. O próximo passo para garantir sua vaga é concluir o pagamento através do link do Mercado Pago (se você ainda não o fez durante o cadastro). Se precisar de ajuda, entre em contato via WhatsApp com a organização.";
+                dataObj["_template"] = "box";
+                dataObj["_captcha"] = "false"; // desativa o captcha para não quebrar o fluxo automático
 
                 // Selecionar o botão de submit para mostrar estado de "Carregando"
                 const submitBtn = regForm.querySelector('button[type="submit"]');
@@ -243,7 +245,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Enviar dados em background (AJAX) para o FormSubmit
                 fetch("https://formsubmit.co/ajax/e8ec10b9a1d188137b9ebdfae79a4234", {
                     method: "POST",
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(dataObj)
                 })
                 .then(response => response.json())
                 .then(data => {
