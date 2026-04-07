@@ -1150,3 +1150,128 @@ a:hover {
 .radio-label input:checked~.radio-custom:after {
     display: block;
 }
+
+/* Administrative Area Styles */
+.nav-admin {
+    color: var(--color-text-main) !important;
+    transition: var(--transition-smooth);
+    border: 1px solid transparent;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.nav-admin:hover {
+    color: var(--color-gold) !important;
+    border-color: rgba(212, 175, 55, 0.4) !important;
+    background: rgba(212, 175, 55, 0.05);
+    opacity: 1 !important;
+}
+
+/* Admin Dashboard Layout */
+.admin-body {
+    background-color: var(--bg-dark);
+    color: var(--color-text-main);
+    display: flex;
+    min-height: 100vh;
+    font-family: var(--font-body);
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: rgba(15, 15, 15, 0.95);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-header h2 {
+    color: var(--color-gold);
+    font-family: var(--font-heading);
+    font-size: 2rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-card {
+    background: rgba(20, 20, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-card.large {
+    grid-column: span 2;
+}
+
+.dashboard-card h3 {
+    color: var(--color-gold-light);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+/* Tables in Admin */
+.admin-table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-table th {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Specific styling for sponsor colors */
+.bg-diamante { background: rgba(0, 0, 128, 0.8) !important; color: white; }
+.bg-ouro { background: rgba(212, 175, 55, 0.8) !important; color: black; }
+.bg-prata { background: rgba(192, 192, 192, 0.8) !important; color: black; }
+.bg-vitis { background: rgba(34, 139, 34, 0.8) !important; color: white; }
+.bg-raiz { background: rgba(139, 69, 19, 0.8) !important; color: white; }
+
+.timer-display {
+    font-size: 2.5rem;
+    font-family: var(--font-heading);
+    color: var(--color-wine-main);
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(100, 0, 0, 0.5);
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Adm - NeuroWine 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Script do Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="styles.css?v=8.3">
+    
+    <!-- Evitar acesso sem login de forma bruta -->
+    <script>
+        if (sessionStorage.getItem('nw_admin_logged') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+    </script>
+</head>
+
+<body class="admin-body dark-theme">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <img src="Logo_NeuroWine.jpg" alt="Logo" style="width: 120px; border-radius: 8px; margin-bottom: 1rem;">
+            <p style="color: var(--color-gold); font-family: var(--font-heading); font-size: 1.5rem;">Administração</p>
+            <p id="loggedUserName" style="font-size: 0.9rem; color: var(--color-text-muted);">Bem-vindo(a)</p>
+        </div>
+        
+        <nav style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+            <a href="#overview" class="btn btn-outline" style="text-align: left; background: rgba(212, 175, 55, 0.1); border-color: var(--color-gold);"><i class="fas fa-chart-line"></i> Visão Geral</a>
+            <a href="#sponsors" class="btn btn-outline" style="text-align: left; border-color: transparent;"><i class="fas fa-handshake"></i> Patrocinadores</a>
+            <a href="#expenses" class="btn btn-outline" style="text-align: left; border-color: transparent;"><i class="fas fa-file-invoice-dollar"></i> Despesas</a>
+            <a href="#attendees" class="btn btn-outline" style="text-align: left; border-color: transparent;"><i class="fas fa-users"></i> Inscritos</a>
+            <a href="#tasks" class="btn btn-outline" style="text-align: left; border-color: transparent;"><i class="fas fa-tasks"></i> Tarefas (To Do)</a>
+            <a href="index.html" class="btn btn-outline" style="text-align: left; border-color: transparent; margin-top: auto;"><i class="fas fa-globe"></i> Ir para o Site</a>
+            <button id="logoutBtn" class="btn btn-primary" style="margin-top: 10px; width: 100%;"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <h2>Visão Geral do Evento</h2>
+        </header>
+
+        <div class="dashboard-grid" id="overview">
+            
+            <!-- Cards de Destaque -->
+            <div class="dashboard-card" style="text-align: center;">
+                <h3>Faltam para o Evento</h3>
+                <div id="countdownTimer" class="timer-display">Carregando...</div>
+                <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 5px;">03/07/2026</p>
+            </div>
+
+            <div class="dashboard-card" style="text-align: center; position: relative;">
+                <h3>Arrecadação Total (Inscrições + Patrocínios)</h3>
+                <div style="width: 100%; max-width: 250px; margin: 0 auto; height: 130px; position: relative;">
+                    <canvas id="gaugeChart"></canvas>
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; text-align: center;">
+                        <span id="totalRevenueText" style="font-size: 1.5rem; color: var(--color-gold); font-weight: bold;">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="dashboard-card large">
+                <h3>Evolução de Inscrições</h3>
+                <canvas id="lineChart" height="100"></canvas>
+            </div>
+
+            <div class="dashboard-card large">
+                <h3>Receita por Categoria de Inscrição</h3>
+                <canvas id="barChart" height="100"></canvas>
+            </div>
+            
+        </div>
+
+        <!-- Section: Sponsors -->
+        <div id="sponsors" class="dashboard-card large" style="margin-bottom: 2rem;">
+            <h3>Tabela de Patrocinadores</h3>
+            <div class="multi-col" style="margin-bottom: 1rem; align-items: flex-end;">
+                <div class="form-group" style="flex: 2;">
+                    <label>Empresa</label>
+                    <input type="text" id="sponsorNameAdd" placeholder="Nome da empresa">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Categoria de Patrocínio</label>
+                    <select id="sponsorCategoryAdd" style="background: rgba(10, 10, 15, 0.6); border: 1px solid rgba(255, 255, 255, 0.15); padding: 0.8rem 1rem; border-radius: 4px; color: white;">
+                        <option value="Diamante">Diamante (R$ 20.000)</option>
+                        <option value="Ouro">Ouro (R$ 12.000)</option>
+                        <option value="Prata">Prata (R$ 8.000)</option>
+                        <option value="Vitis">Vitis (R$ 6.000)</option>
+                        <option value="Raiz">Raiz (R$ 3.000)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Valor (R$)</label>
+                    <input type="number" id="sponsorValueAdd" placeholder="Ex: 12000">
+                </div>
+                <div class="form-group" style="flex: 0.5;">
+                    <button class="btn btn-primary" id="btnSponsorAdd" style="height: 48px;">Adicionar</button>
+                </div>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table" id="sponsorsTable">
+                    <thead>
+                        <tr>
+                            <th>Nome da Empresa</th>
+                            <th>Categoria de Patrocínio</th>
+                            <th>Valor Contribuído</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linhas geradas via JS -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" style="text-align: right; font-weight: bold; color: var(--color-gold);">Total Arrecadado (Patrocínios):</td>
+                            <td colspan="2" id="sponsorsTotal" style="font-weight: bold; color: white;">R$ 0,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section: Expenses vs Revenue -->
+        <div id="expenses" class="dashboard-grid">
+            <div class="dashboard-card" style="grid-column: span 2;">
+                <h3>Tabela de Despesas do Evento</h3>
+                <div class="multi-col" style="margin-bottom: 1rem; align-items: flex-end;">
+                    <div class="form-group" style="flex: 2;">
+                        <label>Tipo de Despesa</label>
+                        <input type="text" id="expenseNameAdd" placeholder="Ex: Fotógrafo, A&B Hotel">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="expenseValueAdd" placeholder="Ex: 5000">
+                    </div>
+                    <div class="form-group" style="flex: 0.5;">
+                        <button class="btn btn-primary" id="btnExpenseAdd" style="height: 48px;">Adicionar</button>
+                    </div>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table" id="expensesTable">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Despesa</th>
+                                <th>Valor</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- JS -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="text-align: right; font-weight: bold; color: #ff6b6b;">Total Despesas:</td>
+                                <td colspan="2" id="expensesTotal" style="font-weight: bold; color: white;">R$ 0,00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="dashboard-card" style="display: flex; flex-direction: column; justify-content: center;">
+                <h3>Resultado Financeiro</h3>
+                <table class="admin-table" style="margin-top: 0;">
+                    <tr>
+                        <td style="color: var(--color-text-muted);">Total de Receitas (Insc. + Patro.):</td>
+                        <td id="resTotalRevenue" style="text-align: right; color: var(--color-gold); font-weight: bold;">R$ 0,00</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-text-muted);">Total de Despesas:</td>
+                        <td id="resTotalExpenses" style="text-align: right; color: #ff6b6b; font-weight: bold;">R$ 0,00</td>
+                    </tr>
+                    <tr style="border-top: 2px solid rgba(255,255,255,0.2);">
+                        <td style="font-size: 1.2rem; font-weight: bold;">Lucro Líquido:</td>
+                        <td id="resProfit" style="text-align: right; font-size: 1.2rem; font-weight: bold; color: #4cd137;">R$ 0,00</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section: To Do -->
+        <div id="tasks" class="dashboard-card large" style="margin-bottom: 2rem;">
+            <h3>To Do List - Organização do Evento</h3>
+            <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                <input type="text" id="taskInputAdd" placeholder="Adicionar nova tarefa..." style="flex: 1; background: rgba(10, 10, 15, 0.6); border: 1px solid rgba(255, 255, 255, 0.15); padding: 0.8rem 1rem; border-radius: 4px; color: white;">
+                <button class="btn btn-outline" id="btnTaskAdd">Adicionar Tarefa</button>
+            </div>
+            <ul id="taskList" style="list-style: none; padding: 0;">
+                <!-- JS tasks geradas -->
+            </ul>
+        </div>
+
+        <!-- Section: Attendees -->
+        <div id="attendees" class="dashboard-card large" style="margin-bottom: 2rem;">
+            <h3>Lista de Inscritos</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Mostrando dados em ordem alfabética.</p>
+            <div class="admin-table-container">
+                <table class="admin-table" id="attendeesTable">
+                    <thead>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>Categoria</th>
+                            <th>Especialidade</th>
+                            <th>Cidade/UF</th>
+                            <th>E-mail</th>
+                            <th>WhatsApp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS gerado mocks -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+
+</html>
