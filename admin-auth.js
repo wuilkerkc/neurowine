@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'marcelo.conrad',
         'leandro.haas'
     ];
-    const secretPassword = 'NeuroWine26#';
+    const secretPasswords = ['NeuroWine26#', 'Neurowine26#'];
 
     // Se já estiver logado (e na página de login), redireciona p/ o dashboard
     if (sessionStorage.getItem('nw_admin_logged') === 'true' && window.location.pathname.includes('admin-login.html')) {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
 
-            if (allowedUsers.includes(username) && password === secretPassword) {
+            if (allowedUsers.includes(username) && secretPasswords.includes(password)) {
                 // Sucesso
                 sessionStorage.setItem('nw_admin_logged', 'true');
                 sessionStorage.setItem('nw_admin_user', username);
