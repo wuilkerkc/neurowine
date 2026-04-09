@@ -230,6 +230,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dataObj = {};
                 formData.forEach((value, key) => { dataObj[key] = value });
                 
+                // Mapeamento dos valores da inscrição e dos rótulos para o banco de dados
+                const catLabels = {
+                    'medico': 'Médico(a)',
+                    'medico_acompanhante': 'Médico(a) + Cônjuge',
+                    'estudante_aulas': 'Estudante (apenas aulas)',
+                    'estudante_completo': 'Estudante (aulas + eventos sociais)'
+                };
+                
+                const catValores = {
+                    'medico': 2500,
+                    'medico_acompanhante': 3500,
+                    'estudante_aulas': 300,
+                    'estudante_completo': 2500
+                };
+
                 // Configurações do FormSubmit
                 dataObj["_subject"] = "Nova Inscrição Recebida! - NeuroWine 2026";
                 dataObj["_autoresponse"] = "Olá! Recebemos sua ficha de inscrição para o NeuroWine 2026 com sucesso. O próximo passo para garantir sua vaga é concluir o pagamento através do link do Mercado Pago (se você ainda não o fez durante o cadastro). Se precisar de ajuda, entre em contato via WhatsApp com a organização.";
@@ -239,32 +254,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Selecionar o botão de submit para mostrar estado de "Carregando"
                 const submitBtn = regForm.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerText;
-                submitBtn.innerText = "Processando Inscrição, por favor aguarde...";
+                submitBtn.innerText = "Registrando e Processando, aguarde...";
                 submitBtn.disabled = true;
 
-                // Enviar dados em background (AJAX) para o FormSubmit
-                fetch("https://formsubmit.co/ajax/e8ec10b9a1d188137b9ebdfae79a4234", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(dataObj)
-                })
-                .then(response => response.json())
-                .then(data => {
+                // Prepara inserção no Supabase
+                const saveToSupabase = async () => {
+                    if (window.supabase) {
+                        try {
+                            const dbData = {
+                                nome: dataObj.nome || "Não informado",
+                                categoria: catLabels[categoriaSelecionada],
+                                especialidade: dataObj.especialidade || "Não informado",
+                                cidade: dataObj.cidade_uf || "Não informado",
+                                email: dataObj.email || "Não informado",
+                                whatsapp: dataObj.telefone || "Não informado",
+                                valor: catValores[categoriaSelecionada]
+                            };
+                            const { error } = await window.supabase.from('attendees').insert([dbData]);
+                            if (error) console.error("Erro Supabase:", error);
+                        } catch (e) {
+                            console.error("Supabase Error:", e);
+                        }
+                    }
+                };
+
+                // Enviar dados em background (AJAX) para o FormSubmit E Supabase paralelo
+                Promise.all([
+                    saveToSupabase(),
+                    fetch("https://formsubmit.co/ajax/e8ec10b9a1d188137b9ebdfae79a4234", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(dataObj)
+                    }).then(response => response.json())
+                ])
+                .then(([supaResult, formSubmitResult]) => {
                     // Remover modal
                     document.getElementById('registrationModal').classList.remove('active');
                     document.body.style.overflow = 'auto';
                     
-                    alert('Sua ficha foi enviada com sucesso! Você será redirecionado para nossa página de pagamento seguro.');
+                    alert('Sua ficha foi registrada com sucesso! Você será redirecionado para nossa página de pagamento seguro.');
                     
                     // Redirecionar para o pagamento
                     window.location.href = linkSelecionado;
                 })
                 .catch(error => {
                     console.error("Erro no formulário:", error);
-                    alert('Houve um pequeno erro na conexão, mas você pode prosseguir com o pagamento. Avisaremos a organização!');
+                    alert('Sua inscrição foi contabilizada, você precisa continuar com o pagamento. Avisaremos a organização!');
                     
                     // Redirecionar de qualquer forma para não perder a venda
                     window.location.href = linkSelecionado;

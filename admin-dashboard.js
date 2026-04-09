@@ -9,35 +9,56 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('loggedUserName').innerText = `Logado como: ${username}`;
     }
 
-    // ==== MOCK DATA INICIAL (Inscritos e Valores de Inscrição) ====
-    // Simula os dados de inscrições
-    const attendeesMock = [
-        { nome: "Ana Beatriz Costa", categoria: "Estudante (apenas aulas)", valor: 300, especialidade: "Estudante", cidade: "Florianópolis/SC", email: "ana@email.com", whatsapp: "48999990001", dataIns: "2026-05-15" },
-        { nome: "Carlos Eduardo Silva", categoria: "Médico(a) + Cônjuge", valor: 3500, especialidade: "Neurocirurgia", cidade: "Curitiba/PR", email: "carlos@email.com", whatsapp: "41999990002", dataIns: "2026-06-12" },
-        { nome: "Daniela Fernanda Lima", categoria: "Médico(a)", valor: 2500, especialidade: "Neurologia", cidade: "São Paulo/SP", email: "daniela@email.com", whatsapp: "11999990003", dataIns: "2026-06-19" },
-        { nome: "Eduardo Gomes", categoria: "Estudante (aulas + eventos sociais)", valor: 2500, especialidade: "Estudante", cidade: "Porto Alegre/RS", email: "eduardo@email.com", whatsapp: "51999990004", dataIns: "2026-06-05" },
-        { nome: "Fátima Silva Rodrigues", categoria: "Médico(a)", valor: 2500, especialidade: "Psiquiatria", cidade: "Lages/SC", email: "fatima@email.com", whatsapp: "49999990005", dataIns: "2026-05-22" },
-        { nome: "Gabriel Moura", categoria: "Médico(a) + Cônjuge", valor: 3500, especialidade: "Neurocirurgia", cidade: "Rio de Janeiro/RJ", email: "gabriel@email.com", whatsapp: "21999990006", dataIns: "2026-05-29" }
-    ];
+    // ==== DADOS DOS INSCRITOS (Supabase vs Fallback) ====
+    let attendeesData = [];
+    let totalInscricoesValor = 0;
     
-    // Sort alfabético da lista de inscritos
-    attendeesMock.sort((a, b) => a.nome.localeCompare(b.nome));
-
-    // Soma inscrições
-    let totalInscricoesValor = attendeesMock.reduce((acc, curr) => acc + curr.valor, 0);
-
-    // Soma para gráfico de barras (Receita por Categoria)
     const revCat = {
         'Estudante (apenas aulas)': 0,
         'Estudante (aulas + eventos sociais)': 0,
         'Médico(a) + Cônjuge': 0,
         'Médico(a)': 0
     };
-    attendeesMock.forEach(a => {
-        if(revCat[a.categoria] !== undefined) {
-            revCat[a.categoria] += a.valor;
+
+    async function fetchAttendeesFromSupabase() {
+        if (window.supabase) {
+            try {
+                const { data, error } = await window.supabase.from('attendees').select('*');
+                if (!error && data) {
+                    attendeesData = data;
+                } else {
+                    console.warn("Erro ao buscar dados ou tabela vazia:", error);
+                }
+            } catch (e) {
+                console.error("Erro na comunicação com Supabase:", e);
+            }
+        } else {
+            console.log("Supabase não configurado. Usando array vazio para inscritos.");
         }
-    });
+
+        // Sort alfabético
+        attendeesData.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+
+        // Remonta contas
+        totalInscricoesValor = attendeesData.reduce((acc, curr) => acc + (parseFloat(curr.valor) || 0), 0);
+        
+        // Zera revCat antes de recalcular
+        Object.keys(revCat).forEach(k => revCat[k] = 0);
+        attendeesData.forEach(a => {
+            if(revCat[a.categoria] !== undefined) {
+                revCat[a.categoria] += (parseFloat(a.valor) || 0);
+            }
+        });
+
+        // Atualiza a interface
+        buildAttendeesTable();
+        updateFinances();
+        updateGaugeChart();
+        
+        // Atualiza Gráficos (definidos no final do arquivo)
+        if (typeof updateLineChart === 'function') updateLineChart();
+        if (typeof updateBarChart === 'function') updateBarChart();
+    }
 
     // ==== CRONÔMETRO DE DIAS ====
     function updateCountdown() {
@@ -60,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buildAttendeesTable = () => {
         const tbody = document.querySelector('#attendeesTable tbody');
         tbody.innerHTML = '';
-        attendeesMock.forEach(att => {
+        attendeesData.forEach(att => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${att.nome}</td>
@@ -277,7 +298,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Gráfico de Linhas (Inscrições no tempo)
     const ctxLine = document.getElementById('lineChart').getContext('2d');
-    new Chart(ctxLine, {
+    let lineChartInstance = null;
+
+    window.updateLineChart = function() {
+        // Agrupar inscrições por mês/dia para simplificar em dados reais
+        const datesCount = {};
+        attendeesData.forEach(att => {
+            const dateStr = att.created_at ? new Date(att.created_at).toLocaleDateString('pt-BR').slice(0, 5) : '00/00';
+            if (!datesCount[dateStr]) datesCount[dateStr] = { medicos: 0, estudantes: 0, total: 0 };
+            
+            datesCount[dateStr].total++;
+            if (att.categoria && att.categoria.toLowerCase().includes('estudante')) {
+                datesCount[dateStr].estudantes++;
+            } else {
+                datesCount[dateStr].medicos++;
+            }
+        });
+
+        // Ordenar as datas
+        const labels = Object.keys(datesCount).sort();
+        const dataMedicos = [];
+        const dataEstudantes = [];
+        const dataTotalAcumulado = [];
+        let acumulado = 0;
+
+        labels.forEach(l => {
+            dataMedicos.push(datesCount[l].medicos);
+            dataEstudantes.push(datesCount[l].estudantes);
+            acumulado += datesCount[l].total;
+            dataTotalAcumulado.push(acumulado);
+        });
+
+        if (lineChartInstance) {
+            lineChartInstance.data.labels = labels.length ? labels : ['Aguardando Inscrições'];
+            lineChartInstance.data.datasets[0].data = dataMedicos;
+            lineChartInstance.data.datasets[1].data = dataEstudantes;
+            lineChartInstance.data.datasets[2].data = dataTotalAcumulado;
+            lineChartInstance.update();
+        } else {
+            lineChartInstance = new Chart(ctxLine, {
         type: 'line',
         data: {
             labels: ['22/05', '29/05', '05/06', '12/06', '19/06', '26/06', '03/07'],
@@ -320,11 +379,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 x: { grid: { color: 'rgba(255, 255, 255, 0.05)' } }
             }
         }
-    });
+        });
+        }
+    } // End of updateLineChart()
 
     // 2. Gráfico de Barras Financeiro
     const ctxBar = document.getElementById('barChart').getContext('2d');
-    new Chart(ctxBar, {
+    let barChartInstance = null;
+
+    window.updateBarChart = function() {
+        if (barChartInstance) {
+            barChartInstance.data.datasets[0].data = [
+                revCat['Estudante (apenas aulas)'],
+                revCat['Estudante (aulas + eventos sociais)'],
+                revCat['Médico(a) + Cônjuge'],
+                revCat['Médico(a)'],
+                totalInscricoesValor
+            ];
+            barChartInstance.update();
+        } else {
+            barChartInstance = new Chart(ctxBar, {
         type: 'bar',
         data: {
             labels: [
@@ -388,7 +462,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 x: { grid: { display: false } }
             }
         }
-    });
+        });
+        }
+    } // End of updateBarChart()
 
     // 3. Velocímetro (Gauge Chart trick com Doughnut)
     // Para criar um gauge sem biblioteca externa complexa, um doughnut chart cortado pela metade
@@ -463,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Call update on init to draw gauge
-    updateGaugeChart();
+    // Inicia a requisição dos dados no carregamento e atualiza tudo em cascata
+    fetchAttendeesFromSupabase();
 
 });
