@@ -216,10 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Dicionário com os links de pagamento
             const linksPagamento = {
-                'medico': 'https://mpago.la/1ZYFUNr',
-                'medico_acompanhante': 'https://mpago.la/178ufQK',
-                'estudante_aulas': 'https://mpago.la/2H787EN',
-                'estudante_completo': 'https://mpago.la/1n13ANZ'
+                'medico': 'https://www.sympla.com.br/evento/neurowine-2026/3414551',
+                'medico_acompanhante': 'https://www.sympla.com.br/evento/neurowine-2026/3414551',
+                'estudante_aulas': 'https://www.sympla.com.br/evento/neurowine-2026/3414551',
+                'estudante_completo': 'https://www.sympla.com.br/evento/neurowine-2026/3414551'
             };
 
             const linkSelecionado = linksPagamento[categoriaSelecionada];
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const catValores = {
                     'medico': 2500,
                     'medico_acompanhante': 3500,
-                    'estudante_aulas': 300,
+                    'estudante_aulas': 500,
                     'estudante_completo': 2500
                 };
 

@@ -668,6 +668,7 @@ a:hover {
     padding-left: 2rem;
     margin-bottom: 1rem;
     font-size: 1.1rem;
+    text-align: left;
 }
 
 .custom-list li::before {
